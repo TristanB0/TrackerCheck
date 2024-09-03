@@ -107,6 +107,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlayerLookup.cpp" />
     <ClCompile Include="TrackerCheck.cpp" />
     <ClCompile Include="GuiBase.cpp" />
   </ItemGroup>
@@ -128,6 +129,7 @@
     <ClInclude Include="logging.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="GuiBase.h" />
+    <ClInclude Include="PlayerLookup.h" />
     <ClInclude Include="TrackerCheck.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>

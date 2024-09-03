@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "TrackerCheck.h"
-
+#include "PlayerLookup.h"
 
 BAKKESMOD_PLUGIN(TrackerCheck, "Check Trackers", plugin_version, PLUGINTYPE_FREEPLAY)
 
@@ -11,12 +11,9 @@ void TrackerCheck::onLoad()
 	_globalCvarManager = cvarManager;
 	//LOG("Plugin loaded!");
 	// !! Enable debug logging by setting DEBUG_LOG = true in logging.h !!
-	//DEBUGLOG("TrackerCheck debug mode enabled");
-
-	// LOG and DEBUGLOG use fmt format strings https://fmt.dev/latest/index.html
 	//DEBUGLOG("1 = {}, 2 = {}, pi = {}, false != {}", "one", 2, 3.14, true);
 
-	//cvarManager->registerNotifier("my_aweseome_notifier", [&](std::vector<std::string> args) {
+	//cvarManager->registerNotifier("my_awesome_notifier", [&](std::vector<std::string> args) {
 	//	LOG("Hello notifier!");
 	//}, "", 0);
 
@@ -30,7 +27,7 @@ void TrackerCheck::onLoad()
 
 	//cvar2.addOnValueChanged(std::bind(&TrackerCheck::YourPluginMethod, this, _1, _2));
 
-	// enabled decleared in the header
+	// enabled declared in the header
 	//enabled = std::make_shared<bool>(false);
 	//cvarManager->registerCvar("TEMPLATE_Enabled", "0", "Enable the TEMPLATE plugin", true, true, 0, true, 1).bindTo(enabled);
 
