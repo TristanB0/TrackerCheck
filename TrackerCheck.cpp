@@ -48,6 +48,7 @@ void TrackerCheck::fetchPlayerList() {
 
 		PlayerInfo p_info;
 		p_info.name = player.GetPlayerName().ToString();
+		p_info.id = player.GetPlayerID();
 
 		switch (player.GetPlatform()) {
 		case OnlinePlatform_Steam:
@@ -91,7 +92,7 @@ void TrackerCheck::showPlayerListUI() const {
 	ImGui::Text("Blue Team:");
 	for (const auto& player : blueTeamPlayers) {
 		if (ImGui::Button(player.name.c_str())) {
-			// TODO: Handle player click - determine further action here
+			handleClick(player);
 			cvarManager->log("Blue team player: " + player.name);
 		}
 	}
@@ -101,7 +102,7 @@ void TrackerCheck::showPlayerListUI() const {
 	ImGui::Text("Orange Team:");
 	for (const auto& player : orangeTeamPlayers) {
 		if (ImGui::Button(player.name.c_str())) {
-			// TODO: Handle player click - determine further action here
+			handleClick(player);
 			cvarManager->log("Orange team player: " + player.name);
 		}
 	}
@@ -110,29 +111,34 @@ void TrackerCheck::showPlayerListUI() const {
 	ImGui::End();
 }
 
-void TrackerCheck::handleClick(const std::string& playerName, const Platform& platform) const {
+void TrackerCheck::handleClick(const PlayerInfo& p_info) const {
+	const std::string open_url = "start https://rocketleague.tracker.network/rocket-league/profile/";
+
 	std::string platform_str;
-	switch (platform) {
-		case Platform::EPIC_GAMES:
-			platform_str = "epic";
-			break;
-		case Platform::STEAM:
-			platform_str = "steam";
-			break;
-		case Platform::PLAYSTATION:
-			platform_str = "psn";
-			break;
-		case Platform::XBOX:
-			platform_str = "xbl";
-			break;
-		case Platform::NINTENDO:
-			platform_str = "switch";
-			break;
-		default:
-			return;
+	switch (p_info.platform) {
+	case Platform::EPIC_GAMES:
+		platform_str = "epic";
+		system((open_url + platform_str + '/' + p_info.name).c_str());
+		break;
+	case Platform::STEAM:
+		platform_str = "steam";
+		system((open_url + platform_str + '/' + std::to_string(p_info.id)).c_str());
+		break;
+	case Platform::PLAYSTATION:
+		platform_str = "psn";
+		system((open_url + platform_str + '/' + p_info.name).c_str());
+		break;
+	case Platform::XBOX:
+		platform_str = "xbl";
+		system((open_url + platform_str + '/' + p_info.name).c_str());
+		break;
+	case Platform::NINTENDO:
+		platform_str = "switch";
+		system((open_url + platform_str + '/' + p_info.name).c_str());
+		break;
+	default:
+		return;
 	}
 
-	// TODO: Open RLTracker
-
-	cvarManager->log("Player clicked: " + playerName + " (" + platform_str + ")");
+	cvarManager->log("Player clicked: " + p_info.name + " (ID: " + std::to_string(p_info.id) + ")" + " (" + platform_str + ")");
 }

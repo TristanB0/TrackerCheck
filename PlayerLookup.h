@@ -11,6 +11,7 @@ enum class Platform
 };
 
 struct PlayerInfo {
+	int id;
 	std::string name;
 	Platform platform;
 };
