@@ -6,9 +6,14 @@ BAKKESMOD_PLUGIN(TrackerCheck, "Check Trackers", plugin_version, PLUGINTYPE_FREE
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 
+/// <summary>
+/// Setting up the plugin behavior on startup.
+/// </summary>
 void TrackerCheck::onLoad()
 {
 	_globalCvarManager = cvarManager;
+
+	LOG("Loading TrackerCheck plugin.");
 
 	// Register notifier to display the UI
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
@@ -21,67 +26,85 @@ void TrackerCheck::onLoad()
 	gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) {});
 	cvarManager->executeCommand("bind F7 ShowPlayerList");
 
-	cvarManager->log("Setting plugin window information.");
 	windowPos = ImVec2(100, 100);
 	windowSize = ImVec2(300, 400);
 }
 
+/// <summary>
+/// Fetch all the players from a game, and assign them a platform and a team color.
+/// </summary>
 void TrackerCheck::fetchPlayerList() {
-	if (!gameWrapper->IsInGame())
+	// Check if user is in a game
+	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame())
 	{
-		cvarManager->log("Not in a game.");
+		LOG("Not in a game.");
 		return;
 	}
 
 	auto server = gameWrapper->GetCurrentGameState();
-	if (server.IsNull()) {
-		cvarManager->log("No game found.");
+	// Check if server is up
+	if (!server) {
+		LOG("No game found.");
 		return;
 	}
 
 	blueTeamPlayers.clear();
 	orangeTeamPlayers.clear();
 
+	// Get players' data
 	auto players = server.GetPRIs();
 	for (auto player : players) {
-		if (player.IsNull()) continue;
+		if (player.IsNull()) {
+			LOG("No data found for a user.");
+			continue;
+		}
 
-		PlayerInfo p_info;
-		p_info.name = player.GetPlayerName().ToString();
-		p_info.id = player.GetPlayerID();
+		PlayerInfo pl_info;
+		pl_info.name = player.GetPlayerName().ToString();
+		pl_info.id = player.GetPlayerID();
 
+		// Assign simpler platform name
 		switch (player.GetPlatform()) {
 		case OnlinePlatform_Steam:
-			p_info.platform = Platform::STEAM;
+			pl_info.platform = Platform::STEAM;
 			break;
 		case OnlinePlatform_Epic:
-			p_info.platform = Platform::EPIC_GAMES;
+			pl_info.platform = Platform::EPIC_GAMES;
 			break;
 		case OnlinePlatform_PS4:
 		case OnlinePlatform_PS3:
-			p_info.platform = Platform::PLAYSTATION;
+			pl_info.platform = Platform::PLAYSTATION;
 			break;
 		case OnlinePlatform_Dingo:
-			p_info.platform = Platform::XBOX;
+			pl_info.platform = Platform::XBOX;
 			break;
 		case OnlinePlatform_NNX:
 		case OnlinePlatform_OldNNX:
-			p_info.platform = Platform::NINTENDO;
+			pl_info.platform = Platform::NINTENDO;
 			break;
 		default:
-			p_info.platform = Platform::OTHER;
+			pl_info.platform = Platform::OTHER;
 			break;
 		}
 
+		LOG("Created player with the following data:");
+		LOG("ID: {}", pl_info.id);
+		LOG("Name: {}", pl_info.name);
+		LOG("Platform: {}", ToString(pl_info.platform));
+
+		// Add player to current team color
 		if (player.GetTeamNum() == 0) {
-			blueTeamPlayers.emplace_back(p_info);
+			blueTeamPlayers.emplace_back(pl_info);
 		}
 		else {
-			orangeTeamPlayers.emplace_back(p_info);
+			orangeTeamPlayers.emplace_back(pl_info);
 		}
 	}
 }
 
+/// <summary>
+/// Used to render own plugin window.
+/// </summary>
 void TrackerCheck::RenderWindow() {
 	ImGui::SetNextWindowPos(windowPos, ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
@@ -93,7 +116,7 @@ void TrackerCheck::RenderWindow() {
 	for (const auto& player : blueTeamPlayers) {
 		if (ImGui::Button(player.name.c_str())) {
 			handleClick(player);
-			cvarManager->log("Blue team player: " + player.name);
+			LOG("Blue team player: " + player.name);
 		}
 	}
 
@@ -103,7 +126,7 @@ void TrackerCheck::RenderWindow() {
 	for (const auto& player : orangeTeamPlayers) {
 		if (ImGui::Button(player.name.c_str())) {
 			handleClick(player);
-			cvarManager->log("Orange team player: " + player.name);
+			LOG("Orange team player: " + player.name);
 		}
 	}
 
@@ -111,34 +134,39 @@ void TrackerCheck::RenderWindow() {
 	ImGui::End();
 }
 
-void TrackerCheck::handleClick(const PlayerInfo& p_info) const {
+/// <summary>
+/// Open default browser with RLTracker page of pl_info.
+/// </summary>
+/// <param name="pl_info">Information about a player.</param>
+void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
 	const std::string open_url = "start https://rocketleague.tracker.network/rocket-league/profile/";
 
 	std::string platform_str;
-	switch (p_info.platform) {
+	switch (pl_info.platform) {
 	case Platform::EPIC_GAMES:
 		platform_str = "epic";
-		system((open_url + platform_str + '/' + p_info.name).c_str());
+		system((open_url + platform_str + '/' + pl_info.name).c_str());
 		break;
 	case Platform::STEAM:
 		platform_str = "steam";
-		system((open_url + platform_str + '/' + std::to_string(p_info.id)).c_str());
+		system((open_url + platform_str + '/' + std::to_string(pl_info.id)).c_str());
 		break;
 	case Platform::PLAYSTATION:
 		platform_str = "psn";
-		system((open_url + platform_str + '/' + p_info.name).c_str());
+		system((open_url + platform_str + '/' + pl_info.name).c_str());
 		break;
 	case Platform::XBOX:
 		platform_str = "xbl";
-		system((open_url + platform_str + '/' + p_info.name).c_str());
+		system((open_url + platform_str + '/' + pl_info.name).c_str());
 		break;
 	case Platform::NINTENDO:
 		platform_str = "switch";
-		system((open_url + platform_str + '/' + p_info.name).c_str());
+		system((open_url + platform_str + '/' + pl_info.name).c_str());
 		break;
 	default:
+		LOG("Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
 		return;
 	}
 
-	cvarManager->log("Player clicked: " + p_info.name + " (ID: " + std::to_string(p_info.id) + ")" + " (" + platform_str + ")");
+	LOG("Clicked player: " + pl_info.name + " (ID: " + std::to_string(pl_info.id) + ")" + " (" + platform_str + ")");
 }

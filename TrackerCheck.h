@@ -11,8 +11,8 @@ constexpr auto plugin_version = stringify(VERSION_MAJOR) "." stringify(VERSION_M
 
 
 class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
-	//,public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
-	,public PluginWindowBase // Uncomment if you want to render your own plugin window
+	//, public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
+	, public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
 	//std::shared_ptr<bool> enabled;
@@ -20,6 +20,7 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	void onLoad() override;
 	//void onUnload() override; // Uncomment and implement if you need a unload method
 
+	// Teams data
 	std::vector<PlayerInfo> blueTeamPlayers;
 	std::vector<PlayerInfo> orangeTeamPlayers;
 
@@ -28,7 +29,6 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	ImVec2 windowSize;
 
 	void fetchPlayerList();
-	//void showPlayerListUI() const;
 	void handleClick(const PlayerInfo& p_info) const;
 
 public:
