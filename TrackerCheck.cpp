@@ -14,12 +14,12 @@ void TrackerCheck::onLoad()
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
 		fetchPlayerList();
 		gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) {
-			showPlayerListUI();
+			RenderWindow();
 			});
 		}, "Displays the list of current players", PERMISSION_ALL);
-	// Bind the notifier to the F6 key
+	// Bind the notifier to the F7 key
 	gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) {});
-	cvarManager->executeCommand("bind F6 ShowPlayerList");
+	cvarManager->executeCommand("bind F7 ShowPlayerList");
 
 	cvarManager->log("Setting plugin window information.");
 	windowPos = ImVec2(100, 100);
@@ -82,7 +82,7 @@ void TrackerCheck::fetchPlayerList() {
 	}
 }
 
-void TrackerCheck::showPlayerListUI() const {
+void TrackerCheck::RenderWindow() {
 	ImGui::SetNextWindowPos(windowPos, ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
 
