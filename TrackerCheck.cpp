@@ -48,6 +48,8 @@ void TrackerCheck::fetchPlayerList() {
 		return;
 	}
 
+	LOG("Connected to game {}.", server.GetMatchGUID());
+
 	blueTeamPlayers.clear();
 	orangeTeamPlayers.clear();
 
@@ -95,9 +97,11 @@ void TrackerCheck::fetchPlayerList() {
 		// Add player to current team color
 		if (player.GetTeamNum() == 0) {
 			blueTeamPlayers.emplace_back(pl_info);
+			LOG("Team: Blue");
 		}
 		else {
 			orangeTeamPlayers.emplace_back(pl_info);
+			LOG("Team: Orange");
 		}
 	}
 }
