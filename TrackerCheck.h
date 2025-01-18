@@ -15,7 +15,8 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	, public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
-	//std::shared_ptr<bool> enabled;
+	std::shared_ptr<bool> enabled;
+	bool isInterfaceVisible;
 
 	void onLoad() override;
 	//void onUnload() override; // Uncomment and implement if you need a unload method
@@ -23,10 +24,6 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	// Teams data
 	std::vector<PlayerInfo> blueTeamPlayers;
 	std::vector<PlayerInfo> orangeTeamPlayers;
-
-	// GUI
-	ImVec2 windowPos;
-	ImVec2 windowSize;
 
 	void fetchPlayerList();
 	void handleClick(const PlayerInfo& p_info) const;

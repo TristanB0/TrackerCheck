@@ -12,22 +12,20 @@ std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 void TrackerCheck::onLoad()
 {
 	_globalCvarManager = cvarManager;
+	isInterfaceVisible = false;
 
 	LOG("Loading TrackerCheck plugin.");
 
 	// Register notifier to display the UI
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
-		fetchPlayerList();
-		gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) {
+		if (!isInterfaceVisible) {
+			fetchPlayerList();
+			isInterfaceVisible = true;
 			RenderWindow();
-			});
+		}
 		}, "Displays the list of current players", PERMISSION_ALL);
 	// Bind the notifier to the F7 key
-	gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) {});
 	cvarManager->executeCommand("bind F7 ShowPlayerList");
-
-	windowPos = ImVec2(100, 100);
-	windowSize = ImVec2(300, 400);
 }
 
 /// <summary>
@@ -110,11 +108,13 @@ void TrackerCheck::fetchPlayerList() {
 /// Used to render own plugin window.
 /// </summary>
 void TrackerCheck::RenderWindow() {
-	ImGui::SetNextWindowPos(windowPos, ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(windowSize, ImGuiCond_FirstUseEver);
+	isInterfaceVisible = false;
 
 	// Start a new ImGui window
-	ImGui::Begin("Player List", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	if (!ImGui::Begin("Player List", &isInterfaceVisible, ImGuiWindowFlags_AlwaysAutoResize)) {
+		ImGui::End();
+		return;
+	}
 
 	ImGui::Text("Blue Team:");
 	for (const auto& player : blueTeamPlayers) {
