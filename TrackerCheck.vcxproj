@@ -110,6 +110,7 @@
     <ClCompile Include="PlayerLookup.cpp" />
     <ClCompile Include="TrackerCheck.cpp" />
     <ClCompile Include="GuiBase.cpp" />
+    <ClCompile Include="TrackerCheckGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h" />

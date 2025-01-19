@@ -11,7 +11,7 @@ constexpr auto plugin_version = stringify(VERSION_MAJOR) "." stringify(VERSION_M
 
 
 class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
-	//, public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
+	, public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
 	, public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
@@ -29,6 +29,6 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	void handleClick(const PlayerInfo& p_info) const;
 
 public:
-	//void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
+	void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
 	void RenderWindow() override; // Uncomment if you want to render your own plugin window
 };
