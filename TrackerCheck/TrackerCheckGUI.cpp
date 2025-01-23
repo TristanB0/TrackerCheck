@@ -5,14 +5,6 @@
 /// Used to render own plugin window.
 /// < / summary>
 void TrackerCheck::RenderWindow() {
-	isInterfaceVisible = false;
-
-	// Start a new ImGui window
-	if (!ImGui::Begin("Player List", &isInterfaceVisible, ImGuiWindowFlags_AlwaysAutoResize)) {
-		ImGui::End();
-		return;
-	}
-
 	ImGui::Text("Blue Team:");
 	for (const auto& player : blueTeamPlayers) {
 		if (ImGui::Button(player.name.c_str())) {
@@ -30,9 +22,6 @@ void TrackerCheck::RenderWindow() {
 			LOG("Orange team player: " + player.name);
 		}
 	}
-
-	// End the ImGui window
-	ImGui::End();
 }
 
 /// <summary>

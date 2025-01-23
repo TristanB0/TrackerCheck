@@ -12,16 +12,15 @@ std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 void TrackerCheck::onLoad()
 {
 	_globalCvarManager = cvarManager;
-	isInterfaceVisible = false;
 
 	LOG("Loading TrackerCheck plugin.");
 
 	// Register notifier to display the UI
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
-		if (!isInterfaceVisible) {
+		if (!isWindowOpen_) {
 			fetchPlayerList();
-			isInterfaceVisible = true;
-			//RenderWindow();
+			//isWindowOpen_ = true;
+			Render();
 		}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
