@@ -19,8 +19,7 @@ void TrackerCheck::onLoad()
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
 		if (!isWindowOpen_) {
 			fetchPlayerList();
-			//isWindowOpen_ = true;
-			Render();
+			gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) { Render(); });
 		}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
