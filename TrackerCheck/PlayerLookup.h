@@ -18,6 +18,7 @@ enum class Platform
 /// </summary>
 struct PlayerInfo {
 	int id;
+	unsigned long long steam_id;
 	std::string name;
 	Platform platform;
 };
@@ -27,8 +28,7 @@ struct PlayerInfo {
 /// </summary>
 /// <param name="p">Platform enum value</param>
 /// <returns></returns>
-inline const char* ToString(Platform p)
-{
+inline const char* ToString(Platform p) {
 	switch (p)
 	{
 	case Platform::STEAM:		return "Steam";

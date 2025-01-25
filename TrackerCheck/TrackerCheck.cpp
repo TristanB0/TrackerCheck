@@ -62,10 +62,14 @@ void TrackerCheck::fetchPlayerList() {
 		pl_info.name = player.GetPlayerName().ToString();
 		pl_info.id = player.GetPlayerID();
 
+		LOG("Created player with the following data:");
+
 		// Assign simpler platform name
 		switch (player.GetPlatform()) {
 		case OnlinePlatform_Steam:
 			pl_info.platform = Platform::STEAM;
+			pl_info.steam_id = player.GetUniqueIdWrapper().GetUID();
+			LOG("Steam ID: {}", pl_info.steam_id);
 			break;
 		case OnlinePlatform_Epic:
 			pl_info.platform = Platform::EPIC_GAMES;
@@ -86,7 +90,6 @@ void TrackerCheck::fetchPlayerList() {
 			break;
 		}
 
-		LOG("Created player with the following data:");
 		LOG("ID: {}", pl_info.id);
 		LOG("Name: {}", pl_info.name);
 		LOG("Platform: {}", ToString(pl_info.platform));
