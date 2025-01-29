@@ -113,31 +113,31 @@ void TrackerCheck::fetchPlayerList() {
 /// </summary>
 /// <param name="pl_info">Information about a player.</param>
 void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
-	const std::wstring source_url = L"start https://rocketleague.tracker.network/rocket-league/profile/";
+    const std::wstring source_url = L"https://rocketleague.tracker.network/rocket-league/profile/";
 
-	std::wstring url_data;
-	switch (pl_info.platform) {
-	case Platform::EPIC_GAMES:
-		url_data = L"epic/" + pl_info.name;
-		break;
-	case Platform::STEAM:
-		url_data = L"steam/" + std::to_wstring(pl_info.id);
-		break;
-	case Platform::PLAYSTATION:
-		url_data = L"psn/" + pl_info.name;
-		break;
-	case Platform::XBOX:
-		url_data = L"xbl/" + pl_info.name;
-		break;
-	case Platform::NINTENDO:
-		url_data = L"switch/" + pl_info.name;
-		break;
-	default:
-		//LOG("Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
-		return;
-	}
+    std::wstring url_data;
+    switch (pl_info.platform) {
+    case Platform::EPIC_GAMES:
+    url_data = L"epic/" + pl_info.name;
+    break;
+    case Platform::STEAM:
+    url_data = L"steam/" + std::to_wstring(pl_info.id);
+    break;
+    case Platform::PLAYSTATION:
+    url_data = L"psn/" + pl_info.name;
+    break;
+    case Platform::XBOX:
+    url_data = L"xbl/" + pl_info.name;
+    break;
+    case Platform::NINTENDO:
+    url_data = L"switch/" + pl_info.name;
+    break;
+    default:
+    //LOG("Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
+    return;
+    }
 
-	ShellExecute(NULL, NULL, (source_url + url_data).c_str(), NULL, NULL, SW_SHOW);
+    ShellExecute(NULL, NULL, (source_url + url_data).c_str(), NULL, NULL, SW_SHOWNORMAL);
 
 	cvarManager->log(L"Clicked player: " + pl_info.name + L" (ID: " + std::to_wstring(pl_info.id) + L")" + L" (" + url_data + L")");
 
