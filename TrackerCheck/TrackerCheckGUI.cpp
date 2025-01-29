@@ -6,31 +6,28 @@
 /// < / summary>
 void TrackerCheck::RenderWindow() {
 	ImGui::Text("Blue Team:");
-	for (const auto& player : blueTeamPlayers) {
-		if (ImGui::Button(utf8_encode(player.name).c_str())) {
-			handleClick(player);
-			LOG(L"Blue team player: " + player.name);
-		}
-		if (player.platform == Platform::STEAM) {
-			ImGui::SameLine();
-			if (ImGui::Button("Open Steam profile")) {
-				openSteamProfile(player.steam_id);
-			}
-		}
-	}
+	render_team_players(blue_team_players);
 
 	ImGui::Separator(); // Separate Allied and Opponent players
 
 	ImGui::Text("Orange Team:");
-	for (const auto& player : orangeTeamPlayers) {
+	render_team_players(orange_team_players);
+}
+
+/// <summary>
+/// Render players of a team.
+/// </summary>
+/// <param name="players"></param>
+void TrackerCheck::render_team_players(const std::vector<PlayerInfo>& players) const {
+	for (const auto& player : players) {
 		if (ImGui::Button(utf8_encode(player.name).c_str())) {
-			handleClick(player);
-			LOG(L"Orange team player: " + player.name);
+			handle_btn_click(player);
+			LOG(L"Player: " + player.name);
 		}
 		if (player.platform == Platform::STEAM) {
 			ImGui::SameLine();
 			if (ImGui::Button("Open Steam profile")) {
-				openSteamProfile(player.steam_id);
+				open_steam_profile(player.steam_id);
 			}
 		}
 	}

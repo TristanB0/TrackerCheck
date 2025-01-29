@@ -24,12 +24,13 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	//void onUnload() override; // Uncomment and implement if you need a unload method
 
 	// Teams data
-	std::vector<PlayerInfo> blueTeamPlayers;
-	std::vector<PlayerInfo> orangeTeamPlayers;
+	std::vector<PlayerInfo> blue_team_players;
+	std::vector<PlayerInfo> orange_team_players;
 
-	void fetchPlayerList();
-	void handleClick(const PlayerInfo& p_info) const;
-	void openSteamProfile(const unsigned long long steamId) const;
+	void fetch_player_list();
+	void handle_btn_click(const PlayerInfo& p_info) const;
+	void open_steam_profile(const unsigned long long steam_id) const;
+	void render_team_players(const std::vector<PlayerInfo>& players) const;
 
 public:
 	void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu

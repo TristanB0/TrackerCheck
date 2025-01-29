@@ -27,7 +27,7 @@ struct PlayerInfo {
 /// </summary>
 /// <param name="p">Platform enum value</param>
 /// <returns></returns>
-inline const wchar_t* platformToString(Platform p) {
+inline const wchar_t* platform_to_wstring(Platform p) {
 	switch (p)
 	{
 	case Platform::STEAM:		return L"Steam";
@@ -44,7 +44,7 @@ inline const wchar_t* platformToString(Platform p) {
 /// </summary>
 /// <param name="p">Platform enum value</param>
 /// <returns></returns>
-inline const wchar_t* platformToRLTrackerString(Platform p) {
+inline const wchar_t* platform_to_RL_tracker_wstring(Platform p) {
 	switch (p)
 	{
 	case Platform::STEAM:		return L"steam";

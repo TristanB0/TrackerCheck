@@ -19,7 +19,7 @@ void TrackerCheck::onLoad()
 	// Register notifier to display the UI
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
 		if (!isWindowOpen_) {
-			fetchPlayerList();
+			fetch_player_list();
 			gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) { Render(); });
 		}
 		}, "Displays the list of current players", PERMISSION_ALL
@@ -31,7 +31,7 @@ void TrackerCheck::onLoad()
 /// <summary>
 /// Fetch all the players from a game, and assign them a platform and a team color.
 /// </summary>
-void TrackerCheck::fetchPlayerList() {
+void TrackerCheck::fetch_player_list() {
 	// Check if user is in a game
 	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame())
 	{
@@ -48,8 +48,8 @@ void TrackerCheck::fetchPlayerList() {
 
 	LOG("Connected to game {}.", server.GetMatchGUID());
 
-	blueTeamPlayers.clear();
-	orangeTeamPlayers.clear();
+	blue_team_players.clear();
+	orange_team_players.clear();
 
 	// Get players' data
 	auto players = server.GetPRIs();
@@ -93,15 +93,15 @@ void TrackerCheck::fetchPlayerList() {
 
 		LOG("ID: {}", pl_info.id);
 		LOG(L"Name: {}", pl_info.name);
-		LOG(L"Platform: {}", platformToString(pl_info.platform));
+		LOG(L"Platform: {}", platform_to_wstring(pl_info.platform));
 
 		// Add player to current team color
 		if (player.GetTeamNum() == 0) {
-			blueTeamPlayers.emplace_back(pl_info);
+			blue_team_players.emplace_back(pl_info);
 			LOG("Team: Blue");
 		}
 		else {
-			orangeTeamPlayers.emplace_back(pl_info);
+			orange_team_players.emplace_back(pl_info);
 			LOG("Team: Orange");
 		}
 	}
@@ -111,10 +111,10 @@ void TrackerCheck::fetchPlayerList() {
 /// Open default browser with RLTracker page of pl_info.
 /// </summary>
 /// <param name="pl_info">Information about a player.</param>
-void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
+void TrackerCheck::handle_btn_click(const PlayerInfo& pl_info) const {
 	const std::wstring source_url = L"https://rocketleague.tracker.network/rocket-league/profile/";
 
-	const std::wstring platform_str = platformToRLTrackerString(pl_info.platform);
+	const std::wstring platform_str = platform_to_RL_tracker_wstring(pl_info.platform);
 	std::wstring url_data;
 
 	switch (pl_info.platform) {
@@ -134,14 +134,14 @@ void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
 
 	ShellExecute(NULL, NULL, (source_url + url_data).c_str(), NULL, NULL, SW_SHOWNORMAL);
 
-	LOG(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, platformToString(pl_info.platform));
+	LOG(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, platform_to_wstring(pl_info.platform));
 }
 
 /// <summary>
 /// Open Steam profile of a player.
 /// </summary>
 /// <param name="steamId">Account ID of a Steam player</param>
-void TrackerCheck::openSteamProfile(const unsigned long long steamId) const {
+void TrackerCheck::open_steam_profile(const unsigned long long steamId) const {
 	const std::wstring steam_base_url = L"https://steamcommunity.com/profiles/";
 	ShellExecute(NULL, NULL, (steam_base_url + std::to_wstring(steamId)).c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
