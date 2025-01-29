@@ -28,8 +28,19 @@ void TrackerCheck::RenderWindow() {
 /// Use to render own tab in the settings menu.
 /// </summary>
 void TrackerCheck::RenderSettings() {
-	ImGui::Text("Developed by Tristan Bony: https://www.tristanbony.me");
-	ImGui::Text("GitHub repository: https://github.com/TristanB0/TrackerCheck");
+	const wchar_t* personal_website_url = L"https://www.tristanbony.me";
+	const wchar_t* github_repo_url = L"https://github.com/TristanB0/TrackerCheck";
+
+	ImGui::Text("Developed by Tristan Bony:");
+	ImGui::SameLine();
+	if (ImGui::Button("Visit my website")) {
+		ShellExecute(NULL, NULL, personal_website_url, NULL, NULL, SW_SHOWNORMAL);
+	}
+
+	if (ImGui::Button("Open GitHub repository")) {
+		ShellExecute(NULL, NULL, github_repo_url, NULL, NULL, SW_SHOWNORMAL);
+	}
+
 	ImGui::Text("Plugin Version: %s", plugin_version);
 
 	// Debug separator
