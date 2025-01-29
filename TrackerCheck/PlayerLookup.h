@@ -39,3 +39,20 @@ inline const char* ToString(Platform p) {
 	default:					return "Other";
 	}
 }
+
+/// <summary>
+/// Convert Platform enum to std::wstring corresponding to Rocket League Tracker notation.
+/// </summary>
+/// <param name="p">Platform enum value</param>
+/// <returns></returns>
+inline std::wstring ToRLTrackerString(Platform p) {
+	switch (p)
+	{
+	case Platform::STEAM:		return L"steam";
+	case Platform::EPIC_GAMES:  return L"epic";
+	case Platform::PLAYSTATION: return L"psn";
+	case Platform::XBOX:		return L"xbl";
+	case Platform::NINTENDO:	return L"switch";
+	default:					return L"other";
+	}
+}
