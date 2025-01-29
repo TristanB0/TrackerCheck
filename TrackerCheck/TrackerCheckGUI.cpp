@@ -6,12 +6,22 @@
 /// < / summary>
 void TrackerCheck::RenderWindow() {
 	ImGui::Text("Blue Team:");
-	render_team_players(blue_team_players);
+	if (!blue_team_players.empty()) {
+		render_team_players(blue_team_players);
+	}
+	else {
+		ImGui::Text("No players found.");
+	}
 
 	ImGui::Separator(); // Separate Allied and Opponent players
 
 	ImGui::Text("Orange Team:");
-	render_team_players(orange_team_players);
+	if (!orange_team_players.empty()) {
+		render_team_players(orange_team_players);
+	}
+	else {
+		ImGui::Text("No players found.");
+	}
 }
 
 /// <summary>
@@ -22,7 +32,7 @@ void TrackerCheck::render_team_players(const std::vector<PlayerInfo>& players) c
 	for (const auto& player : players) {
 		if (ImGui::Button(utf8_encode(player.name).c_str())) {
 			handle_btn_click(player);
-			LOG(L"Player: " + player.name);
+			LOG(L"Player: {}", player.name);
 		}
 		if (player.platform == Platform::STEAM) {
 			ImGui::SameLine();
@@ -40,8 +50,8 @@ void TrackerCheck::RenderSettings() {
 	const wchar_t* personal_website_url = L"https://www.tristanbony.me";
 	const wchar_t* github_repo_url = L"https://github.com/TristanB0/TrackerCheck";
 
-	ImGui::Text("Developed by Tristan Bony:");
-	ImGui::SameLine();
+	ImGui::Text("Developed by Tristan Bony");
+	
 	if (ImGui::Button("Visit my website")) {
 		ShellExecute(NULL, NULL, personal_website_url, NULL, NULL, SW_SHOWNORMAL);
 	}

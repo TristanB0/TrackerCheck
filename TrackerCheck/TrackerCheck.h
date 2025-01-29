@@ -17,8 +17,7 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	, public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
 	, public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
-
-	std::shared_ptr<bool> enabled;
+	//std::shared_ptr<bool> enabled;
 
 	void onLoad() override;
 	//void onUnload() override; // Uncomment and implement if you need a unload method
@@ -27,7 +26,7 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	std::vector<PlayerInfo> blue_team_players;
 	std::vector<PlayerInfo> orange_team_players;
 
-	void fetch_player_list();
+	bool fetch_player_list();
 	void handle_btn_click(const PlayerInfo& p_info) const;
 	void open_steam_profile(const unsigned long long steam_id) const;
 	void render_team_players(const std::vector<PlayerInfo>& players) const;

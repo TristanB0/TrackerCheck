@@ -18,9 +18,8 @@ void TrackerCheck::onLoad()
 
 	// Register notifier to display the UI
 	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
-		if (!isWindowOpen_) {
-			fetch_player_list();
-			gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) { Render(); });
+		if (!isWindowOpen_ && fetch_player_list()) {
+				gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) { Render(); });
 		}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
@@ -31,19 +30,18 @@ void TrackerCheck::onLoad()
 /// <summary>
 /// Fetch all the players from a game, and assign them a platform and a team color.
 /// </summary>
-void TrackerCheck::fetch_player_list() {
+bool TrackerCheck::fetch_player_list() {
 	// Check if user is in a game
-	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame())
-	{
+	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame()) {
 		LOG("Not in a game.");
-		return;
+		return false;
 	}
 
 	auto server = gameWrapper->GetCurrentGameState();
 	// Check if server is up
 	if (!server) {
 		LOG("No game found.");
-		return;
+		return false;
 	}
 
 	LOG("Connected to game {}.", server.GetMatchGUID());
@@ -105,6 +103,8 @@ void TrackerCheck::fetch_player_list() {
 			LOG("Team: Orange");
 		}
 	}
+
+	return true;
 }
 
 /// <summary>
