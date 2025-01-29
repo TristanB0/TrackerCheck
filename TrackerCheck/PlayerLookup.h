@@ -3,8 +3,7 @@
 /// <summary>
 /// Simpler platform enum than BakkesMod OnlinePlatform one.
 /// </summary>
-enum class Platform
-{
+enum class Platform {
 	STEAM,
 	EPIC_GAMES,
 	PLAYSTATION,
@@ -24,28 +23,28 @@ struct PlayerInfo {
 };
 
 /// <summary>
-/// Convert Platform enum to C String.
+/// Convert Platform enum to a wide string literal.
 /// </summary>
 /// <param name="p">Platform enum value</param>
 /// <returns></returns>
-inline const char* ToString(Platform p) {
+inline const wchar_t* platformToString(Platform p) {
 	switch (p)
 	{
-	case Platform::STEAM:		return "Steam";
-	case Platform::EPIC_GAMES:  return "Epic Games";
-	case Platform::PLAYSTATION: return "PlayStation";
-	case Platform::XBOX:		return "Xbox";
-	case Platform::NINTENDO:	return "Nintendo";
-	default:					return "Other";
+	case Platform::STEAM:		return L"Steam";
+	case Platform::EPIC_GAMES:  return L"Epic Games";
+	case Platform::PLAYSTATION: return L"PlayStation";
+	case Platform::XBOX:		return L"Xbox";
+	case Platform::NINTENDO:	return L"Nintendo";
+	default:					return L"Other";
 	}
 }
 
 /// <summary>
-/// Convert Platform enum to std::wstring corresponding to Rocket League Tracker notation.
+/// Convert Platform enum to wide string literal corresponding to Rocket League Tracker notation.
 /// </summary>
 /// <param name="p">Platform enum value</param>
 /// <returns></returns>
-inline std::wstring ToRLTrackerString(Platform p) {
+inline const wchar_t* platformToRLTrackerString(Platform p) {
 	switch (p)
 	{
 	case Platform::STEAM:		return L"steam";

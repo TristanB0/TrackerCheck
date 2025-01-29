@@ -94,8 +94,8 @@ void TrackerCheck::fetchPlayerList() {
 		}
 
 		LOG("ID: {}", pl_info.id);
-		//LOG("Name: {}", pl_info.name);
-		LOG("Platform: {}", ToString(pl_info.platform));
+		LOG(L"Name: {}", pl_info.name);
+		LOG(L"Platform: {}", platformToString(pl_info.platform));
 
 		// Add player to current team color
 		if (player.GetTeamNum() == 0) {
@@ -116,8 +116,9 @@ void TrackerCheck::fetchPlayerList() {
 void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
 	const std::wstring source_url = L"https://rocketleague.tracker.network/rocket-league/profile/";
 
-	const std::wstring platform_str = ToRLTrackerString(pl_info.platform);
+	const std::wstring platform_str = platformToRLTrackerString(pl_info.platform);
 	std::wstring url_data;
+
 	switch (pl_info.platform) {
 	case Platform::EPIC_GAMES:
 	case Platform::PLAYSTATION:
@@ -129,13 +130,11 @@ void TrackerCheck::handleClick(const PlayerInfo& pl_info) const {
 		url_data = std::format(L"{}/{}", platform_str, pl_info.steam_id);
 		break;
 	default:
-		//LOG("Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
+		LOG(L"Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
 		return;
 	}
 
 	ShellExecute(NULL, NULL, (source_url + url_data).c_str(), NULL, NULL, SW_SHOWNORMAL);
 
-	//cvarManager->log(std::format(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, ToString(pl_info.platform)));
-
-	//LOG(std::format(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, ToString(pl_info.platform)));
+	LOG(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, platformToString(pl_info.platform));
 }

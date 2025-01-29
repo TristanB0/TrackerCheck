@@ -42,6 +42,6 @@ void TrackerCheck::RenderSettings() {
 		player.name = L"PNDH \u30C3";
 		player.platform = Platform::EPIC_GAMES;
 		handleClick(player);
-		//LOG(L"Orange team player: " + player.name);
+		LOG(L"Orange team player: {}", player.name);
 	}
 }
