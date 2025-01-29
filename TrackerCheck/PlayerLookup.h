@@ -19,7 +19,7 @@ enum class Platform
 struct PlayerInfo {
 	int id;
 	unsigned long long steam_id;
-	std::string name;
+	std::wstring name;
 	Platform platform;
 };
 

@@ -1,27 +1,28 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "TrackerCheck.h"
+//#include <codecvt>
 
 /// <summary>
 /// Used to render own plugin window.
 /// < / summary>
 void TrackerCheck::RenderWindow() {
-	ImGui::Text("Blue Team:");
-	for (const auto& player : blueTeamPlayers) {
-		if (ImGui::Button(player.name.c_str())) {
-			handleClick(player);
-			LOG("Blue team player: " + player.name);
-		}
-	}
+	//ImGui::Text("Blue Team:");
+	//for (const auto& player : blueTeamPlayers) {
+	//	if (ImGui::Button(player.name.c_str())) {
+	//		handleClick(player);
+	//		LOG(L"Blue team player: " + player.name);
+	//	}
+	//}
 
-	ImGui::Separator(); // Separate Allied and Opponent players
+	//ImGui::Separator(); // Separate Allied and Opponent players
 
-	ImGui::Text("Orange Team:");
-	for (const auto& player : orangeTeamPlayers) {
-		if (ImGui::Button(player.name.c_str())) {
-			handleClick(player);
-			LOG("Orange team player: " + player.name);
-		}
-	}
+	//ImGui::Text("Orange Team:");
+	//for (const auto& player : orangeTeamPlayers) {
+	//	if (ImGui::Button(player.name.c_str())) {
+	//		handleClick(player);
+	//		LOG(L"Orange team player: " + player.name);
+	//	}
+	//}
 }
 
 /// <summary>
@@ -34,15 +35,13 @@ void TrackerCheck::RenderSettings() {
 
 	// Debug separator
 	ImGui::Separator();
-	ImGui::Text(reinterpret_cast<const char*>(u8"Characters \U0001F60D \u03A9"));
+	ImGui::Text("Characters test");
 	if (ImGui::Button("DEBUG ONLY")) {
 		PlayerInfo player;
 		player.id = 123456789;
-		player.name = reinterpret_cast<const char*>(u8"Characters \U0001F60D \u03A9");
+		player.name = L"PNDH \u30C3";
 		player.platform = Platform::EPIC_GAMES;
 		handleClick(player);
-		LOG("Orange team player: " + player.name);
+		//LOG(L"Orange team player: " + player.name);
 	}
-	//std::u8string test = u8"\U0001F60D \u03A9";
-	//const char* literal = reinterpret_cast<const char*>(u8"I \U0001F60D \u03A9");
 }
