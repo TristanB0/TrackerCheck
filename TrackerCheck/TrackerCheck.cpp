@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "TrackerCheck.h"
 #include "PlayerLookup.h"
-#include "Windows.h"
-#include "shellapi.h"
 #include <format>
 
 BAKKESMOD_PLUGIN(TrackerCheck, "Check Trackers", plugin_version, PLUGINTYPE_FREEPLAY)
