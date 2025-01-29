@@ -29,6 +29,7 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 
 	void fetchPlayerList();
 	void handleClick(const PlayerInfo& p_info) const;
+	void openSteamProfile(const unsigned long long steamId) const;
 
 public:
 	void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu

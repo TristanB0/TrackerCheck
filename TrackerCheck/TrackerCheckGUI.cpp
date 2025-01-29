@@ -11,6 +11,12 @@ void TrackerCheck::RenderWindow() {
 			handleClick(player);
 			LOG(L"Blue team player: " + player.name);
 		}
+		if (player.platform == Platform::STEAM) {
+			ImGui::SameLine();
+			if (ImGui::Button("Open Steam profile")) {
+				openSteamProfile(player.steam_id);
+			}
+		}
 	}
 
 	ImGui::Separator(); // Separate Allied and Opponent players
@@ -20,6 +26,12 @@ void TrackerCheck::RenderWindow() {
 		if (ImGui::Button(utf8_encode(player.name).c_str())) {
 			handleClick(player);
 			LOG(L"Orange team player: " + player.name);
+		}
+		if (player.platform == Platform::STEAM) {
+			ImGui::SameLine();
+			if (ImGui::Button("Open Steam profile")) {
+				openSteamProfile(player.steam_id);
+			}
 		}
 	}
 }
@@ -42,16 +54,4 @@ void TrackerCheck::RenderSettings() {
 	}
 
 	ImGui::Text("Plugin Version: %s", plugin_version);
-
-	// Debug separator
-	ImGui::Separator();
-	ImGui::Text("Characters test");
-	if (ImGui::Button("DEBUG ONLY")) {
-		PlayerInfo player;
-		player.id = 123456789;
-		player.name = L"PNDH \u30C3";
-		player.platform = Platform::EPIC_GAMES;
-		handleClick(player);
-		LOG(L"Orange team player: {}", player.name);
-	}
 }
