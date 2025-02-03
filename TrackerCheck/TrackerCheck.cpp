@@ -10,21 +10,24 @@ std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 /// <summary>
 /// Setting up the plugin behavior on startup.
 /// </summary>
-void TrackerCheck::onLoad()
-{
+void TrackerCheck::onLoad() {
 	_globalCvarManager = cvarManager;
 
 	LOG("Loading TrackerCheck plugin.");
 
 	// Register notifier to display the UI
-	cvarManager->registerNotifier("ShowPlayerList", [this](std::vector<std::string> args) {
-		if (!isWindowOpen_ && fetch_player_list()) {
-				gameWrapper->RegisterDrawable([this](CanvasWrapper canvas) { Render(); });
-		}
+	cvarManager->registerNotifier(
+		"ShowPlayerList",
+		[this](std::vector<std::string> args) {
+			if (!isWindowOpen_) {
+				fetch_player_list();
+				Render();
+			}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
+
 	// Bind the notifier to the F7 key
-	cvarManager->executeCommand("bind F7 ShowPlayerList");
+	cvarManager->setBind("F7", "ShowPlayerList");
 }
 
 /// <summary>
