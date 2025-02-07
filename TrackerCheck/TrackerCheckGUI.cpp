@@ -5,19 +5,37 @@
 /// Used to render own plugin window.
 /// < / summary>
 void TrackerCheck::RenderWindow() {
+	ImGui::Text("Refresh players manually:");
+	if (ImGui::Button("Refresh")) {
+		LOG("Refreshing players.");
+		TrackerCheck::fetch_players();
+	}
+
+	ImGui::Separator();
+
 	ImGui::Text("Blue Team:");
 	if (!blue_team_players.empty()) {
-		render_team_players(blue_team_players);
+		render_teams(blue_team_players);
 	}
 	else {
 		ImGui::Text("No players found.");
 	}
 
-	ImGui::Separator(); // Separate Allied and Opponent players
+	ImGui::Separator();
 
 	ImGui::Text("Orange Team:");
 	if (!orange_team_players.empty()) {
-		render_team_players(orange_team_players);
+		render_teams(orange_team_players);
+	}
+	else {
+		ImGui::Text("No players found.");
+	}
+
+	ImGui::Separator();
+
+	ImGui::Text("Bots and Spectators:");
+	if (!spectators.empty()) {
+		render_teams(spectators);
 	}
 	else {
 		ImGui::Text("No players found.");
@@ -28,10 +46,14 @@ void TrackerCheck::RenderWindow() {
 /// Render players of a team.
 /// </summary>
 /// <param name="players"></param>
-void TrackerCheck::render_team_players(const std::vector<PlayerInfo>& players) const {
+void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 	for (const auto& player : players) {
+		if (player.id == 0) {
+			ImGui::Text("%s (Bot)", utf8_encode(player.name));
+			continue;
+		}
 		if (ImGui::Button(utf8_encode(player.name).c_str())) {
-			handle_btn_click(player);
+			open_rl_tracker(player);
 			LOG(L"Player: {}", player.name);
 		}
 		if (player.platform == Platform::STEAM) {
@@ -51,7 +73,7 @@ void TrackerCheck::RenderSettings() {
 	const wchar_t* github_repo_url = L"https://github.com/TristanB0/TrackerCheck";
 
 	ImGui::Text("Developed by Tristan Bony");
-	
+
 	if (ImGui::Button("Visit my website")) {
 		ShellExecute(NULL, NULL, personal_website_url, NULL, NULL, SW_SHOWNORMAL);
 	}

@@ -17,11 +17,9 @@ the Steam player profile and copy its ID.
 In addition to the tracker, you can also open the Steam profile of any player
 using this platform.
 
-## TODO
+## Planned
 
-- [ ] Fetch players only once when a game starts, and not when the key is pressed
-
-- [ ] Save a history of the past few games
+- Save a history of the past few games
 
 ## License
 

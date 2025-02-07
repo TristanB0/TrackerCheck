@@ -15,42 +15,52 @@ void TrackerCheck::onLoad() {
 
 	LOG("Loading TrackerCheck plugin.");
 
+	gameWrapper->HookEvent(
+		"Function TAGame.Team_TA.PostBeginPlay",
+		//std::bind(&TrackerCheck::fetch_players, this)
+		[this](std::string eventName) {
+			LOG("Event triggered: {}", eventName);
+			// Delay for 1 second (1000 milliseconds)
+			gameWrapper->SetTimeout([this](GameWrapper* gw) { fetch_players(); }, 10.0f);
+		}
+	);
+
 	// Register notifier to display the UI
 	cvarManager->registerNotifier(
-		"ShowPlayerList",
+		"show_player_list_ui",
 		[this](std::vector<std::string> args) {
 			if (!isWindowOpen_) {
-				fetch_player_list();
 				Render();
 			}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
 
 	// Bind the notifier to the F7 key
-	cvarManager->setBind("F7", "ShowPlayerList");
+	cvarManager->setBind("F7", "show_player_list_ui");
 }
 
 /// <summary>
 /// Fetch all the players from a game, and assign them a platform and a team color.
 /// </summary>
-bool TrackerCheck::fetch_player_list() {
+void TrackerCheck::fetch_players() {
 	// Check if user is in a game
 	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame()) {
 		LOG("Not in a game.");
-		return false;
+		return;
 	}
 
 	auto server = gameWrapper->GetCurrentGameState();
 	// Check if server is up
 	if (!server) {
 		LOG("No game found.");
-		return false;
+		return;
 	}
 
 	LOG("Connected to game {}.", server.GetMatchGUID());
 
 	blue_team_players.clear();
 	orange_team_players.clear();
+	spectators.clear();
 
 	// Get players' data
 	auto players = server.GetPRIs();
@@ -97,26 +107,29 @@ bool TrackerCheck::fetch_player_list() {
 		LOG(L"Platform: {}", platform_to_wstring(pl_info.platform));
 
 		// Add player to current team color
-		if (player.GetTeamNum() == 0) {
+		switch (player.GetTeamNum()) {
+		case 0:
 			blue_team_players.emplace_back(pl_info);
 			LOG("Team: Blue");
-		}
-		else {
+			break;
+		case 1:
 			orange_team_players.emplace_back(pl_info);
 			LOG("Team: Orange");
+			break;
+		default:
+			spectators.emplace_back(pl_info);
+			LOG("Team: Bot/Spectator");
+			break;
 		}
 	}
-
-	return true;
 }
 
 /// <summary>
 /// Open default browser with RLTracker page of pl_info.
 /// </summary>
 /// <param name="pl_info">Information about a player.</param>
-void TrackerCheck::handle_btn_click(const PlayerInfo& pl_info) const {
+void TrackerCheck::open_rl_tracker(const PlayerInfo& pl_info) const {
 	const std::wstring source_url = L"https://rocketleague.tracker.network/rocket-league/profile/";
-
 	const std::wstring platform_str = platform_to_RL_tracker_wstring(pl_info.platform);
 	std::wstring url_data;
 

@@ -25,11 +25,12 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	// Teams data
 	std::vector<PlayerInfo> blue_team_players;
 	std::vector<PlayerInfo> orange_team_players;
+	std::vector<PlayerInfo> spectators;
 
-	bool fetch_player_list();
-	void handle_btn_click(const PlayerInfo& p_info) const;
+	void fetch_players();
+	void open_rl_tracker(const PlayerInfo& p_info) const;
 	void open_steam_profile(const unsigned long long steam_id) const;
-	void render_team_players(const std::vector<PlayerInfo>& players) const;
+	void render_teams(const std::vector<PlayerInfo>& players) const;
 
 public:
 	void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
