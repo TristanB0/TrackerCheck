@@ -27,7 +27,7 @@ void TrackerCheck::onLoad() {
 
 	// Register notifier to display the UI
 	cvarManager->registerNotifier(
-		"show_player_list_ui",
+		"open_trackercheck_ui",
 		[this](std::vector<std::string> args) {
 			if (!isWindowOpen_) {
 				Render();
@@ -36,7 +36,7 @@ void TrackerCheck::onLoad() {
 	);
 
 	// Bind the notifier to the F7 key
-	cvarManager->setBind("F7", "show_player_list_ui");
+	cvarManager->setBind(bind_key, "open_trackercheck_ui");
 }
 
 /// <summary>
@@ -118,7 +118,7 @@ void TrackerCheck::fetch_players() {
 			break;
 		default:
 			spectators.emplace_back(pl_info);
-			LOG("Team: Bot/Spectator");
+			LOG("Team: Spectators");
 			break;
 		}
 	}

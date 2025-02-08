@@ -6,8 +6,9 @@
 /// < / summary>
 void TrackerCheck::RenderWindow() {
 	ImGui::Text("Refresh players manually:");
+	ImGui::SameLine();
 	if (ImGui::Button("Refresh")) {
-		LOG("Refreshing players.");
+		LOG("Refreshing list of player.");
 		TrackerCheck::fetch_players();
 	}
 
@@ -31,9 +32,13 @@ void TrackerCheck::RenderWindow() {
 		ImGui::Text("No players found.");
 	}
 
+	if (!is_spectator_visible) {
+		return;
+	}
+
 	ImGui::Separator();
 
-	ImGui::Text("Bots and Spectators:");
+	ImGui::Text("Spectators:");
 	if (!spectators.empty()) {
 		render_teams(spectators);
 	}
@@ -69,6 +74,28 @@ void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 /// Use to render own tab in the settings menu.
 /// </summary>
 void TrackerCheck::RenderSettings() {
+	ImGui::Checkbox("Show spectators in pop-up window", &is_spectator_visible);
+
+	static char input_buffer[16] = "F7";
+	ImGui::Text("Current binding: %s", bind_key);
+	ImGui::InputText("##bind_key", input_buffer, IM_ARRAYSIZE(input_buffer));
+	ImGui::SameLine();
+	if (ImGui::Button("Set bind")) {
+		cvarManager->removeBind(bind_key);
+		cvarManager->setBind(input_buffer, "open_trackercheck_ui");
+		bind_key = input_buffer;
+		LOG("Key bind changed to: {}", input_buffer);
+	}
+
+	if (ImGui::Button("Reset key bind")) {
+		LOG("Key bind reset.");
+		cvarManager->removeBind(bind_key);
+		bind_key = "F7";
+		cvarManager->setBind("F7", "open_trackercheck_ui");
+	}
+
+	ImGui::Separator();
+
 	const wchar_t* personal_website_url = L"https://www.tristanbony.me";
 	const wchar_t* github_repo_url = L"https://github.com/TristanB0/TrackerCheck";
 
