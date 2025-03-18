@@ -16,10 +16,10 @@ enum class Platform {
 /// Player data.
 /// </summary>
 struct PlayerInfo {
-	int id;
-	unsigned long long steam_id;
-	std::wstring name;
-	Platform platform;
+	int in_game_id;				// Player ID during the game
+	std::string platform_id;	// Player ID based on its platform
+	std::wstring name;			// Player name
+	Platform platform;			// Player platform
 };
 
 /// <summary>

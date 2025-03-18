@@ -2,13 +2,14 @@
 #include "TrackerCheck.h"
 #include "PlayerLookup.h"
 #include <format>
+#include <string>
 
 BAKKESMOD_PLUGIN(TrackerCheck, "Check Trackers", plugin_version, PLUGINTYPE_FREEPLAY)
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 
 /// <summary>
-/// Setting up the plugin behavior on startup.
+/// Set up the plugin behavior on startup.
 /// </summary>
 void TrackerCheck::onLoad() {
 	_globalCvarManager = cvarManager;
@@ -17,11 +18,9 @@ void TrackerCheck::onLoad() {
 
 	gameWrapper->HookEvent(
 		"Function TAGame.Team_TA.PostBeginPlay",
-		//std::bind(&TrackerCheck::fetch_players, this)
 		[this](std::string eventName) {
 			LOG("Event triggered: {}", eventName);
-			// Delay for 1 second (1000 milliseconds)
-			gameWrapper->SetTimeout([this](GameWrapper* gw) { fetch_players(); }, 10.0f);
+			gameWrapper->SetTimeout([this](GameWrapper* gw) { fetch_players(); }, 10.0f);	// Delay for 10 seconds
 		}
 	);
 
@@ -72,16 +71,13 @@ void TrackerCheck::fetch_players() {
 
 		PlayerInfo pl_info;
 		pl_info.name = player.GetPlayerName().ToWideString();
-		pl_info.id = player.GetPlayerID();
-
-		LOG("Created player with the following data:");
+		pl_info.in_game_id = player.GetPlayerID();
+		pl_info.platform_id = std::to_string(player.GetUniqueIdWrapper().GetUID());
 
 		// Assign simpler platform name
 		switch (player.GetPlatform()) {
 		case OnlinePlatform_Steam:
 			pl_info.platform = Platform::STEAM;
-			pl_info.steam_id = player.GetUniqueIdWrapper().GetUID();
-			LOG("Steam ID: {}", pl_info.steam_id);
 			break;
 		case OnlinePlatform_Epic:
 			pl_info.platform = Platform::EPIC_GAMES;
@@ -102,8 +98,10 @@ void TrackerCheck::fetch_players() {
 			break;
 		}
 
-		LOG("ID: {}", pl_info.id);
+		LOG("Created player with the following data:");
+		LOG("In game ID: {}", pl_info.in_game_id);
 		LOG(L"Name: {}", pl_info.name);
+		LOG("Platform based ID: {}", pl_info.platform_id);
 		LOG(L"Platform: {}", platform_to_wstring(pl_info.platform));
 
 		// Add player to current team color
@@ -141,23 +139,24 @@ void TrackerCheck::open_rl_tracker(const PlayerInfo& pl_info) const {
 		url_data = std::format(L"{}/{}", platform_str, pl_info.name);
 		break;
 	case Platform::STEAM:
-		url_data = std::format(L"{}/{}", platform_str, pl_info.steam_id);
+		url_data = std::format(L"{}/{}", platform_str, std::wstring(pl_info.platform_id.begin(), pl_info.platform_id.end()));
 		break;
 	default:
-		LOG(L"Could not open player profile of {} (ID: {})", pl_info.name, pl_info.id);
+		LOG(L"Could not open player profile of {} (ID: {})", pl_info.name, pl_info.in_game_id);
 		return;
 	}
 
 	ShellExecute(NULL, NULL, (source_url + url_data).c_str(), NULL, NULL, SW_SHOWNORMAL);
 
-	LOG(L"Clicked player: {} (ID: {}) (Platform: {})", pl_info.name, pl_info.id, platform_to_wstring(pl_info.platform));
+	LOG(L"Clicked player: {} (Platform: {})", pl_info.name, platform_to_wstring(pl_info.platform));
 }
 
 /// <summary>
 /// Open Steam profile of a player.
 /// </summary>
-/// <param name="steamId">Account ID of a Steam player</param>
-void TrackerCheck::open_steam_profile(const unsigned long long steamId) const {
+/// <param name="steam_id">Account ID of a Steam player</param>
+void TrackerCheck::open_steam_profile(std::string steam_id) const {
 	const std::wstring steam_base_url = L"https://steamcommunity.com/profiles/";
-	ShellExecute(NULL, NULL, (steam_base_url + std::to_wstring(steamId)).c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, NULL, std::format(L"{}{}", steam_base_url, std::wstring(steam_id.begin(), steam_id.end())).c_str(), NULL, NULL, SW_SHOWNORMAL);
+	LOG("Clicked Steam ID: {}", steam_id);
 }

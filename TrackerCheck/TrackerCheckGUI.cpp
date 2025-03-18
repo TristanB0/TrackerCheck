@@ -53,7 +53,7 @@ void TrackerCheck::RenderWindow() {
 /// <param name="players"></param>
 void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 	for (const auto& player : players) {
-		if (player.id == 0) {
+		if (player.in_game_id == 0) {
 			ImGui::Text("%s (Bot)", utf8_encode(player.name));
 			continue;
 		}
@@ -64,7 +64,7 @@ void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 		if (player.platform == Platform::STEAM) {
 			ImGui::SameLine();
 			if (ImGui::Button("Open Steam profile")) {
-				open_steam_profile(player.steam_id);
+				open_steam_profile(player.platform_id);
 			}
 		}
 	}
