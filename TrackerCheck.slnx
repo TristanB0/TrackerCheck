@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Release" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="TrackerCheck/TrackerCheck.vcxproj" Id="5a8369f1-3ffa-4789-a8bf-21b43c057885" />
+</Solution>
