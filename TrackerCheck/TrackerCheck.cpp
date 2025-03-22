@@ -153,7 +153,7 @@ void TrackerCheck::open_rl_tracker(const PlayerInfo& pl_info) const {
 /// Open Steam profile of a player.
 /// </summary>
 /// <param name="steam_id">Account ID of a Steam player</param>
-void TrackerCheck::open_steam_profile(std::string steam_id) const {
+void TrackerCheck::open_steam_profile(const std::string steam_id) const {
 	const std::wstring steam_base_url = L"https://steamcommunity.com/profiles/";
 	ShellExecute(NULL, NULL, std::format(L"{}{}", steam_base_url, std::wstring(steam_id.begin(), steam_id.end())).c_str(), NULL, NULL, SW_SHOWNORMAL);
 	LOG("Clicked Steam ID: {}", steam_id);

@@ -32,7 +32,7 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 
 	void fetch_players();
 	void open_rl_tracker(const PlayerInfo& p_info) const;
-	void open_steam_profile(std::string steam_id) const;
+	void open_steam_profile(const std::string steam_id) const;
 	void render_teams(const std::vector<PlayerInfo>& players) const;
 
 public:
