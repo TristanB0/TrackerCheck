@@ -29,7 +29,7 @@ void TrackerCheck::onLoad() {
 		"open_trackercheck_ui",
 		[this](std::vector<std::string> args) {
 			if (!isWindowOpen_) {
-				Render();
+				cvarManager->executeCommand("togglemenu " + GetMenuName());
 			}
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
