@@ -28,9 +28,7 @@ void TrackerCheck::onLoad() {
 	cvarManager->registerNotifier(
 		"open_trackercheck_ui",
 		[this](std::vector<std::string> args) {
-			if (!isWindowOpen_) {
-				cvarManager->executeCommand("togglemenu " + GetMenuName());
-			}
+			cvarManager->executeCommand("togglemenu " + GetMenuName());
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
 
