@@ -32,11 +32,14 @@ void TrackerCheck::onLoad() {
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
 
-	if (bind_key_.empty()) {
-		bind_key_ = "F7";
+	// Bind the notifier to the F7 key if not already bound
+	if (cvarManager->getBindStringForKey(DEFAULT_BIND_KEY).empty()) {
+		bind_key_ = DEFAULT_BIND_KEY;
+		cvarManager->setBind(bind_key_, "open_trackercheck_ui");
 	}
-	// Bind the notifier to the F7 key
-	cvarManager->setBind(bind_key_, "open_trackercheck_ui");
+	else {
+		LOG("The key is already used, set one in the plugin settings.");
+	}
 }
 
 /// <summary>
