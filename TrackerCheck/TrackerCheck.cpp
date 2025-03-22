@@ -32,11 +32,11 @@ void TrackerCheck::onLoad() {
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
 
-	if (bind_key.empty()) {
-		bind_key = "F7";
+	if (bind_key_.empty()) {
+		bind_key_ = "F7";
 	}
 	// Bind the notifier to the F7 key
-	cvarManager->setBind(bind_key, "open_trackercheck_ui");
+	cvarManager->setBind(bind_key_, "open_trackercheck_ui");
 }
 
 /// <summary>
@@ -58,9 +58,9 @@ void TrackerCheck::fetch_players() {
 
 	LOG("Connected to game {}.", server.GetMatchGUID());
 
-	blue_team_players.clear();
-	orange_team_players.clear();
-	spectators.clear();
+	blue_team_players_.clear();
+	orange_team_players_.clear();
+	spectators_.clear();
 
 	// Get players' data
 	auto players = server.GetPRIs();
@@ -108,15 +108,15 @@ void TrackerCheck::fetch_players() {
 		// Add player to current team color
 		switch (player.GetTeamNum()) {
 		case 0:
-			blue_team_players.emplace_back(pl_info);
+			blue_team_players_.emplace_back(pl_info);
 			LOG("Team: Blue");
 			break;
 		case 1:
-			orange_team_players.emplace_back(pl_info);
+			orange_team_players_.emplace_back(pl_info);
 			LOG("Team: Orange");
 			break;
 		default:
-			spectators.emplace_back(pl_info);
+			spectators_.emplace_back(pl_info);
 			LOG("Team: Spectators");
 			break;
 		}

@@ -15,8 +15,8 @@ void TrackerCheck::RenderWindow() {
 	ImGui::Separator();
 
 	ImGui::Text("Blue Team:");
-	if (!blue_team_players.empty()) {
-		render_teams(blue_team_players);
+	if (!blue_team_players_.empty()) {
+		render_teams(blue_team_players_);
 	}
 	else {
 		ImGui::Text("No players found.");
@@ -25,22 +25,22 @@ void TrackerCheck::RenderWindow() {
 	ImGui::Separator();
 
 	ImGui::Text("Orange Team:");
-	if (!orange_team_players.empty()) {
-		render_teams(orange_team_players);
+	if (!orange_team_players_.empty()) {
+		render_teams(orange_team_players_);
 	}
 	else {
 		ImGui::Text("No players found.");
 	}
 
-	if (!is_spectator_visible) {
+	if (!is_spectator_visible_) {
 		return;
 	}
 
 	ImGui::Separator();
 
 	ImGui::Text("Spectators:");
-	if (!spectators.empty()) {
-		render_teams(spectators);
+	if (!spectators_.empty()) {
+		render_teams(spectators_);
 	}
 	else {
 		ImGui::Text("No players found.");
@@ -74,24 +74,24 @@ void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 /// Use to render own tab in the settings menu.
 /// </summary>
 void TrackerCheck::RenderSettings() {
-	ImGui::Checkbox("Show spectators in pop-up window", &is_spectator_visible);
+	ImGui::Checkbox("Show spectators in pop-up window", &is_spectator_visible_);
 
 	static char input_buffer[16] = "F7";
-	ImGui::Text("Current binding: %s", bind_key);
-	ImGui::InputText("##bind_key", input_buffer, IM_ARRAYSIZE(input_buffer));
+	ImGui::Text("Current binding: %s", bind_key_);
+	ImGui::InputText("##bind_key_", input_buffer, IM_ARRAYSIZE(input_buffer));
 	ImGui::SameLine();
 	if (ImGui::Button("Set bind")) {
-		cvarManager->removeBind(bind_key);
+		cvarManager->removeBind(bind_key_);
 		cvarManager->setBind(input_buffer, "open_trackercheck_ui");
-		bind_key = input_buffer;
+		bind_key_ = input_buffer;
 		LOG("Key bind changed to: {}", input_buffer);
 	}
 
 	if (ImGui::Button("Reset key bind")) {
 		LOG("Key bind reset.");
-		cvarManager->removeBind(bind_key);
-		bind_key = "F7";
-		cvarManager->setBind(bind_key, "open_trackercheck_ui");
+		cvarManager->removeBind(bind_key_);
+		bind_key_ = "F7";
+		cvarManager->setBind(bind_key_, "open_trackercheck_ui");
 	}
 
 	ImGui::Separator();

@@ -22,13 +22,13 @@ class TrackerCheck : public BakkesMod::Plugin::BakkesModPlugin
 	void onLoad() override;
 	//void onUnload() override; // Uncomment and implement if you need a unload method
 
-	bool is_spectator_visible = false;
-	std::string bind_key;
+	bool is_spectator_visible_ = false;
+	std::string bind_key_;
 
 	// Teams data
-	std::vector<PlayerInfo> blue_team_players;
-	std::vector<PlayerInfo> orange_team_players;
-	std::vector<PlayerInfo> spectators;
+	std::vector<PlayerInfo> blue_team_players_;
+	std::vector<PlayerInfo> orange_team_players_;
+	std::vector<PlayerInfo> spectators_;
 
 	void fetch_players();
 	void open_rl_tracker(const PlayerInfo& p_info) const;
