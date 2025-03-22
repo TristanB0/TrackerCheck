@@ -91,7 +91,7 @@ void TrackerCheck::RenderSettings() {
 		LOG("Key bind reset.");
 		cvarManager->removeBind(bind_key);
 		bind_key = "F7";
-		cvarManager->setBind("F7", "open_trackercheck_ui");
+		cvarManager->setBind(bind_key, "open_trackercheck_ui");
 	}
 
 	ImGui::Separator();

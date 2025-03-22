@@ -32,6 +32,9 @@ void TrackerCheck::onLoad() {
 		}, "Displays the list of current players", PERMISSION_ALL
 	);
 
+	if (bind_key.empty()) {
+		bind_key = "F7";
+	}
 	// Bind the notifier to the F7 key
 	cvarManager->setBind(bind_key, "open_trackercheck_ui");
 }
