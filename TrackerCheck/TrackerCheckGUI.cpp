@@ -57,6 +57,10 @@ void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 			ImGui::Text("%s (Bot)", utf8_encode(player.name));
 			continue;
 		}
+		if (player.name.find_first_not_of('*') == std::string::npos) {
+			ImGui::Text("Name censored");
+			continue;
+		}
 		if (ImGui::Button(utf8_encode(player.name).c_str())) {
 			open_rl_tracker(player);
 			LOG(L"Player: {}", player.name);
