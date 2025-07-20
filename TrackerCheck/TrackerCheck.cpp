@@ -47,7 +47,7 @@ void TrackerCheck::onLoad() {
 /// </summary>
 void TrackerCheck::fetch_players() {
 	// Check if user is in a game
-	if (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame()) {
+	if (gameWrapper->IsInFreeplay() || (!gameWrapper->IsInGame() && !gameWrapper->IsInOnlineGame())) {
 		LOG("Not in a game.");
 		return;
 	}
