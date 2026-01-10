@@ -16,11 +16,14 @@ void TrackerCheck::onLoad() {
 
 	LOG("Loading TrackerCheck plugin.");
 
-	gameWrapper->HookEvent(
-		"Function TAGame.Team_TA.PostBeginPlay",
-		[this](std::string eventName) {
-			LOG("Event triggered: {}", eventName);
-			gameWrapper->SetTimeout([this](GameWrapper* gw) { fetch_players(); }, 10.0f);	// Delay for 10 seconds
+	// Fetch players when countdown starts
+	gameWrapper->HookEventWithCallerPost<ServerWrapper>(
+		"Function GameEvent_Soccar_TA.Countdown.BeginState",
+		[&](ServerWrapper caller, void* params, std::string eventName) {
+			if (caller.GetSecondsRemaining() == 300)
+			{
+				fetch_players();
+			}
 		}
 	);
 
@@ -33,7 +36,9 @@ void TrackerCheck::onLoad() {
 	);
 
 	// Bind the notifier to the F7 key if not already bound
-	if (cvarManager->getBindStringForKey(DEFAULT_BIND_KEY).empty()) {
+	const auto current_bind_key = cvarManager->getBindStringForKey(DEFAULT_BIND_KEY);
+	LOG("Current binded key: {}", current_bind_key);
+	if (current_bind_key.empty()) {
 		bind_key_ = DEFAULT_BIND_KEY;
 		cvarManager->setBind(bind_key_, "open_trackercheck_ui");
 	}
