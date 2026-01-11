@@ -67,7 +67,8 @@ void TrackerCheck::render_teams(const std::vector<PlayerInfo>& players) const {
 		}
 		if (player.platform == Platform::STEAM) {
 			ImGui::SameLine();
-			if (ImGui::Button("Open Steam profile")) {
+			std::string steam_btn_label = std::string("Open Steam profile##") + player.platform_id;
+			if (ImGui::Button(steam_btn_label.c_str())) {
 				open_steam_profile(player.platform_id);
 			}
 		}
